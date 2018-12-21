@@ -14,9 +14,15 @@ io.on('connection' , (socket) => {
     console.log('New User Connected');
 
     socket.emit('newMessage' , {
-        from: 'Moha',
-        text: 'lol Works again',
-        createdAt: '7:03'
+        from: "Admin!",
+        text: "Welcome To My Node-Chat",
+        createdAt: new Date().getTime()
+    });
+
+    socket.broadcast.emit('newMessage' , {
+        from: "Admin!",
+        text: "New User Joined!",
+        createdAt: new Date().getTime()
     });
 
     socket.on('disconnect' , () => {
@@ -24,7 +30,12 @@ io.on('connection' , (socket) => {
     });
 
     socket.on('createMessage' , (message) => {
-        console.log('MessageCreated' , message)
+        console.log('MessageCreated' , message);
+        io.emit('newMessage' , {
+            from: message.from,
+            text: message.text,
+            createdAt: new Date().getTime()
+        });
     });
 });
 
